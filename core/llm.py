@@ -4,13 +4,20 @@ import json
 import os
 import re
 from typing import Any, Dict, List, Optional
-from openai import OpenAI
+
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
 
 from core.config import settings
 
 
-def get_llm_client() -> Optional[OpenAI]:
+def get_llm_client() -> Optional[Any]:
     """Instantiate OpenAI client with configured API key and base URL."""
+    if OpenAI is None:
+        return None
+
     api_key = settings.openai_api_key
     base_url = settings.openai_base_url
 
