@@ -10,13 +10,34 @@ Usage:
 
 import json
 import platform
+import subprocess
 import sys
 from pathlib import Path
 from typing import Optional
-import typer
-from rich.panel import Panel
-from rich.prompt import Confirm
-from rich.syntax import Syntax
+
+# Auto-install dependencies if launched in a fresh environment
+try:
+    import typer
+    from rich.panel import Panel
+    from rich.prompt import Confirm
+    from rich.syntax import Syntax
+    from rich.table import Table
+except ImportError:
+    print("[*] First-time setup: Installing required CLI packages (typer, rich, pydantic)...")
+    try:
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", "typer", "rich", "pydantic", "--disable-pip-version-check"]
+        )
+    except Exception:
+        # Fallback with --user if global permissions are restricted
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", "typer", "rich", "pydantic", "--user", "--disable-pip-version-check"]
+        )
+    import typer
+    from rich.panel import Panel
+    from rich.prompt import Confirm
+    from rich.syntax import Syntax
+    from rich.table import Table
 
 from core.autostart import (
     disable_autostart as disable_autostart_func,

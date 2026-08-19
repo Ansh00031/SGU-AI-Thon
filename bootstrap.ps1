@@ -100,8 +100,17 @@ foreach ($f in $coreFiles) {
     Invoke-WebRequest -Uri $fileUrl -OutFile $dest -UseBasicParsing -ErrorAction SilentlyContinue
 }
 
-# Install minimal CLI dependencies if pip available
-& $pythonExe -m pip install typer rich pydantic --quiet -ErrorAction SilentlyContinue
+# Install minimal CLI dependencies
+Write-Host "`n[*] Verifying & installing Python CLI dependencies (typer, rich, pydantic)..." -ForegroundColor Cyan
+$checkDeps = & $pythonExe -c "import typer, rich, pydantic; print('OK')" 2>$null
+if ($checkDeps -ne "OK") {
+    try {
+        & $pythonExe -m pip install typer rich pydantic --disable-pip-version-check
+    } catch {
+        # Fallback with --user
+        & $pythonExe -m pip install typer rich pydantic --user --disable-pip-version-check
+    }
+}
 
 # 4. Launch the Autonomous Diagnostic Agent
 Write-Host "`n[4/4] 🚀 Launching Autonomous OS Debugging Agent..." -ForegroundColor Green
