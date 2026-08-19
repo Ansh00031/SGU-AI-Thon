@@ -90,6 +90,24 @@ The **Autonomous OS Debugging Agent** is a local Python CLI tool that automates 
 
 ---
 
+## 🌐 1-Line Cloud Rescue (For Crashed PCs / WinRE)
+
+If a laptop is stuck in a boot loop or does **NOT** have this project installed, you can launch the entire agent directly over the internet from the **Windows Recovery Command Prompt (WinRE)** with a single command:
+
+```powershell
+# Run directly in PowerShell or WinRE:
+irm https://raw.githubusercontent.com/ansh6/os-debug-agent/main/bootstrap.ps1 | iex
+```
+
+Or from the standard **WinRE `cmd.exe` Command Prompt**:
+```cmd
+powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/ansh6/os-debug-agent/main/bootstrap.ps1 | iex"
+```
+
+> **How it works:** It automatically detects internal storage drives (`C:\`, `D:\`), locates or bootstraps a lightweight portable Python runtime (~15MB), downloads the agent code, and launches the autonomous diagnostic environment immediately!
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Prerequisites
@@ -179,7 +197,31 @@ python agent.py rollback session_20260817_195408_80070005 --skip-admin-check
 
 ---
 
-### 4. Check Environment & Security Status
+### 4. Resume Post-Reboot Verification
+
+If a system fix required a restart, the agent automatically registers a Windows `RunOnce` hook, or can be manually resumed anytime:
+
+```powershell
+python agent.py resume session_20260817_195408_80070005 --skip-admin-check
+```
+
+---
+
+### 5. Persistent Startup & Reboot Auto-Run
+
+Enable the agent to automatically launch and run system health checks upon PC boot:
+
+```powershell
+# Enable automatic startup on Windows boot / restart:
+python agent.py enable-autostart
+
+# Disable automatic startup:
+python agent.py disable-autostart
+```
+
+---
+
+### 6. Check Environment & Security Status
 
 ```powershell
 python agent.py check-env
