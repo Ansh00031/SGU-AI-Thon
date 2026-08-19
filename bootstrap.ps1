@@ -69,8 +69,8 @@ if ($pythonExe) {
 # 3. Download Latest Agent Source from GitHub Repository
 Write-Host "[3/4] Fetching latest Autonomous OS Debugging Agent files from cloud..." -ForegroundColor Cyan
 
-# Default repository URL (User can replace with their GitHub username)
-$rawBase = "https://raw.githubusercontent.com/ansh6/os-debug-agent/main"
+# Default repository URL
+$rawBase = "https://raw.githubusercontent.com/Ansh00031/SGU-AI-Thon/main"
 
 $coreFiles = @(
     "agent.py",
